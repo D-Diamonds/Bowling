@@ -25,7 +25,7 @@ public class GameState {
     private boolean foundGoal;
 
 
-    public GameState(View view, Context context, Bitmap maze) {
+    public GameState(View view, Context context) {
         this.view = view;
         this.context = context;
         this.screenWidth = view.findViewById(R.id.gameView).getWidth();

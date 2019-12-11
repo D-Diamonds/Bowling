@@ -15,22 +15,21 @@ public class GameThread extends Thread {
     private SurfaceHolder surfaceHolder;
     private Paint paint;
     private GameState gameState;
-    //private float fps;
     private long lastTime;
 
-    public GameThread(SurfaceHolder holder, Context context, Handler handler, View view, Bitmap maze) {
+    public GameThread(SurfaceHolder holder, Context context, Handler handler, View view) {
         this.surfaceHolder = holder;
         this.paint = new Paint();
-        this.gameState = new GameState(view, context, maze);
+        this.gameState = new GameState(view, context);
         this.lastTime = System.nanoTime();
     }
 
-    public GameState getMazeState() {
+    public GameState getGameState() {
         return this.gameState;
     }
 
-    public void setMazeState(GameState mazeState) {
-        this.gameState = mazeState;
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     @Override

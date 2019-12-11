@@ -25,7 +25,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
     private GameThread thread;
     private Context context;
     private GestureDetectorCompat gestureDetector;
-    private int currentMaze = 0;
 
 
     private static final int SWIPE_THRESHOLD = 100;
@@ -58,20 +57,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
                     public void close() throws SecurityException {
 
                     }
-                }, getThis().getRootView(), getRandomMaze()));
+                }, getThis().getRootView()));
                 getThread().start();
             }
         });
-    }
-
-    public void randomize() {
-        this.thread.getMazeState().getPlayer().setDirection("null");
-        this.thread.setMazeState(new GameState(getThis().getRootView(), getContext(), getRandomMaze()));
-    }
-
-    public void reset() {
-        this.thread.getMazeState().getPlayer().setDirection("null");
-        this.thread.setMazeState(new GameState(getThis().getRootView(), getContext(), this.thread.getMazeState().getMaze()));
     }
 
 
@@ -87,24 +76,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         this.thread = thread;
     }
 
-    public Bitmap getRandomMaze() {
-        int[] mazesToPick = this.mazes;
-        if (this.currentMaze != 0) {
-            int[] newMaze = new int[this.mazes.length - 1];
-            int count = 0;
-            for (int i = 0; i < this.mazes.length; i++)
-                if (this.mazes[i] != this.currentMaze) {
-                    newMaze[count] = this.mazes[i];
-                    count++;
-                }
-            mazesToPick = newMaze;
-        }
-        int mazeID = mazesToPick[((int) (Math.random() * mazesToPick.length))];
-        this.currentMaze = mazeID;
-        System.out.println("New Maze: " + mazeID);
-        Bitmap maze = BitmapFactory.decodeResource(this.context.getResources(), mazeID);
-        return Bitmap.createScaledBitmap(maze, this.getWidth(), this.getHeight(), false);
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -148,10 +119,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffX > 0) {
-                        this.thread.getMazeState().getPlayer().setDirection("right");
                         System.out.println("FLING RIGHT!");
                     } else {
-                        this.thread.getMazeState().getPlayer().setDirection("left");
                         System.out.println("FLING LEFT!");
                     }
                     result = true;
@@ -160,10 +129,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
             else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                 if (diffY > 0) {
                     System.out.println("FLING DOWN!");
-                    this.thread.getMazeState().getPlayer().setDirection("down");
                 } else {
                     System.out.println("FLING UP!");
-                    this.thread.getMazeState().getPlayer().setDirection("up");
                 }
                 result = true;
             }
