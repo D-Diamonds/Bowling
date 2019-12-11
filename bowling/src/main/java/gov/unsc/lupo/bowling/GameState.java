@@ -29,37 +29,7 @@ public class GameState {
         this.context = context;
 //        this.screenWidth = view.findViewById(R.id.gameView).getWidth();
 //        this.screenHeight = view.findViewById(R.id.gameView).getHeight();
-        this.maze = maze;
 //        this.player = new com.example.maze4.Ball(this.screenWidth, this.screenHeight);
-        this.time = 0;
-        this.foundGoal = false;
-
-        // Initializes ball to wherever the green box is
-        boolean foundStart = false;
-        float startX = 0;
-        float endX = 0;
-        float startY = 0;
-        float endY = 0;
-        for (int i = 0; i < this.maze.getWidth(); i++) {
-            for (int j = 0; j < this.maze.getHeight(); j++) {
-                int pixel = this.maze.getPixel(i, j);
-                if (isGreenPixel(pixel)) {
-                    if (!foundStart) {
-                        startX = i;
-                        startY = j;
-                    }
-                    endX = i;
-                    endY = j;
-                    foundStart = true;
-                }
-            }
-        }
-        System.out.println();
-        this.player.setPosition((endX + startX) / 2, (endY + startY) / 2);
-
-
-        System.out.println("DIMENSIONS: " + this.screenWidth + " * " + this.screenHeight);
-        reset();
 
     }
 
