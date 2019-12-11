@@ -1,4 +1,4 @@
-package com.example.maze4;
+package com.example.bowling;
 
 import androidx.appcompat.app.AppCompatActivity;
 
