@@ -13,13 +13,12 @@ public class GameThread extends Thread {
     private SurfaceHolder surfaceHolder;
     private Paint paint;
     private GameState gameState;
-    private long lastTime;
 
     public GameThread(SurfaceHolder holder, Context context, Handler handler, View view) {
         this.surfaceHolder = holder;
         this.paint = new Paint();
+        this.paint.setTextSize(48);
         this.gameState = new GameState(view, context);
-        this.lastTime = System.nanoTime();
     }
 
     public GameState getGameState() {
@@ -32,15 +31,15 @@ public class GameThread extends Thread {
 
     @Override
     public void run() {
+        long lastTime = System.nanoTime();
         while (true) {
-            long time = System.nanoTime();
-
             Canvas canvas = this.surfaceHolder.lockCanvas();
-            int dt = (int) ((time - this.lastTime) / 10000000);
+            long time = System.nanoTime();
+            float dt = (time - lastTime) / 1000000000f;
+            lastTime = time;
             this.gameState.update(dt);
             this.gameState.draw(canvas, this.paint);
             this.surfaceHolder.unlockCanvasAndPost(canvas);
-            this.lastTime = time;
         }
     }
 }
