@@ -31,8 +31,8 @@ public class GameState {
         int radius = 75;
         for (int i = 0; i < 4; i++) {
             for (int j = 0 ; j <= i; j++) {
-                float x = screenWidth * 0.5f;
-                float y = screenHeight * 0.45f - (i * 100f);
+                float x = screenWidth * 0.35f + (j * radius);
+                float y = screenHeight * 0.45f - (i * radius);
                 pins[c] = new Ball(x, y, radius);
                 c++;
             }
