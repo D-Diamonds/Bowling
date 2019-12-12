@@ -3,28 +3,31 @@ package gov.unsc.lupo.bowling;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 
 public class Ball {
 
     private float screenWidth;
     private float screenHeight;
-    private float radius;
     private float x;
     private float y;
+    private float x2;
+    private float y2;
     private float dx;
     private float dy;
     private String direction = "";
 
     private final float SPEED = 1;
 
-    public Ball(float x, float y, float radius) {
+    public Ball(float x, float y, float x2, float y2) {
 //        this.screenWidth = screenWidth;
 //        this.screenHeight = screenHeight;
-        this.radius = radius;
         this.x = x;
         this.y = y;
+        this.x2 = x2;
+        this.y2 = y2;
         this.dx = 0;
-        this.dy = 0;
+        this.dy = -100;
     }
 
     public void setDirection(String direction) {
@@ -77,9 +80,6 @@ public class Ball {
         return this.y;
     }
 
-    public float getRadius() {
-        return this.radius;
-    }
 
 
     public void update(float dt) {
@@ -89,6 +89,6 @@ public class Ball {
 
     public void draw(Canvas canvas, Paint paint) {
         paint.setColor(Color.BLUE);
-        canvas.drawCircle(this.x, this.y, this.radius, paint);
+        canvas.drawOval(new RectF(this.x, this.y, this.x2, this.y2), paint);
     }
 }
