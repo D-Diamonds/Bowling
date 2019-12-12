@@ -29,12 +29,12 @@ public class GameState {
         pins = new Ball[10];
         int c = 0;
         int radius = 100;
-        int gap = 2;
+        int gap = 3;
         for (int i = 0; i < 4; i++) {
             for (int j = 0 ; j <= i; j++) {
                 float x = (screenWidth * .5f) - ((i + .5f) * radius) - (i * gap) + (j * 2 * (gap + radius));
                 //float x = screenWidth * 0.22f + (j * 2 * radius) + (4f - i) * radius;
-                float y = screenHeight * 0.4f - (i * 2 * (radius + gap));
+                float y = screenHeight * 0.4f - (i * (2 * radius + gap));
                 pins[c] = new Ball(x, y, x + radius, y + radius);
                 c++;
             }
