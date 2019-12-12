@@ -3,70 +3,38 @@ package gov.unsc.lupo.bowling;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
+
+import androidx.annotation.Nullable;
 
 public class Ball {
 
-    private float screenWidth;
-    private float screenHeight;
-    private float radius;
     private float x;
     private float y;
-    private float dx;
-    private float dy;
-    private String direction = "";
+    private float radius;
+    private float theta;
+    private int color = Color.BLUE;
+    private float speed = 0;
+    private int id;
 
-    private final float SPEED = 1;
+    private static int ballID = 0;
 
-    public Ball(float screenWidth, float screenHeight) {
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-        this.radius = (float) (this.screenHeight * .01);
-        this.x = -9999;
-        this.y = -9999;
-        this.dx = 0;
-        this.dy = 0;
+    public Ball(float x, float y, float radius) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.theta = 0;
+        this.id = ballID++;
     }
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-        updateDirection();
-    }
-
-    public String getDirection() {
-        return this.direction;
-    }
-
-    public void updateDirection() {
-        if (this.direction.equals("right")) {
-            this.dx = SPEED;
-            this.dy = 0;
-        }
-        else if (this.direction.equals("left")) {
-            this.dx = -SPEED;
-            this.dy = 0;
-        }
-        else if (this.direction.equals("up")) {
-            this.dx = 0;
-            this.dy = -SPEED;
-        }
-        else if (this.direction.equals("down")) {
-            this.dx = 0;
-            this.dy = SPEED;
-        }
-        else {
-            this.dx = 0;
-            this.dy = 0;
-        }
-
-        //System.out.println("Dx: " + this.dx);
-        //System.out.println("Dy: " + this.dy);
-
+    public void move(float theta, float speed) {
+        this.theta = theta;
+        this.speed = speed;
     }
 
     public void setPosition(float x, float y) {
         this.x = x;
         this.y = y;
-        //System.out.println("Ball placed at (" + this.x + ", " + this.y + ")");
     }
 
     public float getX() {
@@ -77,18 +45,41 @@ public class Ball {
         return this.y;
     }
 
-    public float getRadius() {
-        return this.radius;
-    }
-
-
     public void update(float dt) {
-        this.x += this.dx * dt;
-        this.y += this.dy * dt;
+        this.x += this.speed * Math.cos(Math.toRadians(theta)) * dt;
+        this.y += this.speed * Math.sin(Math.toRadians(theta)) * dt;
     }
 
     public void draw(Canvas canvas, Paint paint) {
         paint.setColor(Color.BLUE);
-        canvas.drawCircle(this.x, this.y, this.radius, paint);
+        canvas.drawOval(new RectF(this.x, this.y, this.x + this.radius, this.y + this.radius), paint);
+    }
+
+    public boolean collides(Ball b) {
+        float lx = b.x - x;
+        float ly = b.y - y;
+        return Math.sqrt((lx * lx) + (ly * ly)) <= radius + b.radius;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
+    public float getTheta() {
+        return theta;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        assert obj instanceof Ball;
+        return ((Ball) obj).id == id;
     }
 }

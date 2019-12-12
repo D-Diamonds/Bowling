@@ -30,7 +30,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback, Ges
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         setFocusable(true);
-        System.out.println(getWidth());
         this.post(new Runnable() {
             @Override
             public void run() {
