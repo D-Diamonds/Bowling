@@ -17,12 +17,12 @@ public class Ball {
 
     private final float SPEED = 1;
 
-    public Ball(float screenWidth, float screenHeight) {
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-        this.radius = (float) (this.screenHeight * .01);
-        this.x = -9999;
-        this.y = -9999;
+    public Ball(float x, float y, float radius) {
+//        this.screenWidth = screenWidth;
+//        this.screenHeight = screenHeight;
+        this.radius = radius;
+        this.x = x;
+        this.y = y;
         this.dx = 0;
         this.dy = 0;
     }
