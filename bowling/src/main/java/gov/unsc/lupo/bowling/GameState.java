@@ -27,23 +27,22 @@ public class GameState {
         this.screenWidth = gv.getWidth();
         this.screenHeight = gv.getHeight();
         pins = new RectF[10];
+        int radius = 75;
+        int gap = 3;
         int c = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j <= i; j++) {
-                float x = screenWidth * 0.3f + (j * 100f);
-                float y = screenHeight * 0.45f - (i * 100f);
-                pins[c] = new RectF(x, y, x + 50, y + 50);
+                float x = (screenWidth * 0.5f) - ((i + 0.5f) * radius) - (i * gap) + (j * (gap + radius));
+                float y = screenHeight * 0.3f - (i * (radius + gap));
+                pins[c] = new RectF(x, y, x + radius, y + radius);
                 c++;
             }
         }
-        ball = new RectF(screenWidth * 0.5f, screenHeight * 0.7f, screenWidth * 0.5f + 25, screenHeight * 0.7f + 25);
+
+        ball = new RectF(screenWidth * 0.5f - (radius), screenHeight * 0.7f, screenWidth * 0.5f + (2 * radius), screenHeight * 0.7f + (radius * 2));
     }
 
     public void update(float dt) {
-        ball.offset(0, -dt * 60);
-        if (ball.top <= 0)
-            ball.offset(0, dt);
-
     }
 
 
@@ -52,6 +51,6 @@ public class GameState {
         for (RectF pin : pins) {
             canvas.drawOval(pin, paint);
         }
-        canvas.drawOval(ball, paint);
+        //canvas.drawOval(ball, paint);
     }
 }
