@@ -27,15 +27,19 @@ public class GameState {
         this.screenWidth = gv.getWidth();
         this.screenHeight = gv.getHeight();
         pins = new RectF[10];
-        for (int i = 0; i < pins.length; i++) {
-            float x = screenWidth * 0.1f + (i * 10f);
-            float y = screenHeight * 0.25f + ((i % 4) * 100);
-            pins[i] = new RectF(x, y, x + 25, y + 25);
+        int c = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j <= i; j++) {
+                float x = screenWidth * 0.3f + (j * 100f);
+                float y = screenHeight * 0.45f - (i * 100f);
+                pins[c] = new RectF(x, y, x + 50, y + 50);
+                c++;
+            }
         }
         ball = new RectF(screenWidth * 0.5f, screenHeight * 0.7f, screenWidth * 0.5f + 25, screenHeight * 0.7f + 25);
     }
+
     public void update(float dt) {
-        time = 1 / dt;
         ball.offset(0, -dt * 60);
         if (ball.top <= 0)
             ball.offset(0, dt);
@@ -49,6 +53,5 @@ public class GameState {
             canvas.drawOval(pin, paint);
         }
         canvas.drawOval(ball, paint);
-        canvas.drawText("FPS: " + time, 10, 100, paint);
     }
 }
