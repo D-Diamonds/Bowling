@@ -6,13 +6,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.renderscript.Matrix2f;
 import android.view.View;
 
 import java.util.Vector;
 
+import javax.vecmath.Matrix3f;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector2f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 
 
 public class GameState {
@@ -47,7 +49,7 @@ public class GameState {
         }
         System.out.println(c);
         ball = new Ball(screenWidth * 0.5f, screenHeight * 0.7f, radius);
-        ball.setVelocity(new Vector2f(0, -50));
+        ball.setVelocity(new Vector2f(10, -100));
 
         balls = new Ball[pins.length + 1];
         for (int i = 0; i < pins.length; i++) {
@@ -70,14 +72,13 @@ public class GameState {
                     Vector2f p3 = new Vector2f(p2);
                     p3.sub(p1);
                     p3.normalize();
+                    Matrix3f m1 = new Matrix3f();
                     p3.scale((mag1 + mag2) / 2);
-                    Vector2f p4 = new Vector2f(p3);
-                    Matrix2f m1 = new Matrix2f();
-                    m1.rotate((float) Math.PI / 2);
-                    m1.multiply(new Matrix2f(new float[]{p4.x, 0, 0, p4.y}));
-                    p4.set(new float[]{m1.get(0, 0), m1.get(1, 1)});
+                    Vector3f p4 = new Vector3f(p3.x, p3.y, 0);
+                    m1.rotZ((float) Math.PI / 2);
+                    m1.transform(p4);
+                    pin.setVelocity(new Vector2f(p4.x, p4.y));
                     pin2.setVelocity(p3);
-                    pin.setVelocity(p4);
                 }
             }
         }
