@@ -6,7 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.renderscript.Matrix2f;
 import android.view.View;
+
+import java.util.Vector;
+
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Vector2f;
 
 
 public class GameState {
@@ -16,6 +22,7 @@ public class GameState {
     private View view;
     private Context context;
     private Ball[] pins;
+    private Ball[] balls;
     private Ball ball;
     private float time;
 
@@ -40,22 +47,37 @@ public class GameState {
         }
         System.out.println(c);
         ball = new Ball(screenWidth * 0.5f, screenHeight * 0.7f, radius);
-        ball.move(90, 50);
+        ball.setVelocity(new Vector2f(0, -50));
+
+        balls = new Ball[pins.length + 1];
+        for (int i = 0; i < pins.length; i++) {
+            balls[i] = pins[i];
+        }
+        balls[balls.length - 1] = ball;
     }
 
     public void update(float dt) {
-        for (Ball pin : pins) {
-            for (Ball pin2 : pins) {
-                if (!pin.equals(pin2) && pin.collides(pin2)) {
-                    float pin1Dx = (float) (pin.getSpeed() * Math.cos(Math.toRadians(pin.getTheta())));
-                    float pin2Dx = (float) (pin2.getSpeed() * Math.cos(Math.toRadians(pin2.getTheta())));
-
-                    float pin1Dy = (float) (pin.getSpeed() * Math.sin(Math.toRadians(pin.getTheta())));
-                    float pin2Dy = (float) (pin2.getSpeed() * Math.sin(Math.toRadians(pin2.getTheta())));
-
-                    float finalX = (pin1Dx + pin2Dx) / 2;
-                    float finalY = (pin1Dy + pin2Dy) / 2;
-                    pin.move((float ) Math.atan(finalY / finalX), (float) Math.sqrt((finalX * finalX) + (finalY * finalY)));
+        for (Ball pin : balls) {
+            for (Ball pin2 : balls) {
+                if (pin.getID() != pin2.getID() && pin.collides(pin2)) {
+                    pin.setColor(Color.RED);
+                    Vector2f p1 = new Vector2f(pin.getPosition());
+                    Vector2f p2 = new Vector2f(pin2.getPosition());
+                    Vector2f v1 = new Vector2f(pin.getVelocity());
+                    Vector2f v2 = new Vector2f(pin2.getVelocity());
+                    float mag1 = v1.length();
+                    float mag2 = v2.length();
+                    Vector2f p3 = new Vector2f(p2);
+                    p3.sub(p1);
+                    p3.normalize();
+                    p3.scale((mag1 + mag2) / 2);
+                    Vector2f p4 = new Vector2f(p3);
+                    Matrix2f m1 = new Matrix2f();
+                    m1.rotate((float) Math.PI / 2);
+                    m1.multiply(new Matrix2f(new float[]{p4.x, 0, 0, p4.y}));
+                    p4.set(new float[]{m1.get(0, 0), m1.get(1, 1)});
+                    pin2.setVelocity(p3);
+                    pin.setVelocity(p4);
                 }
             }
         }
